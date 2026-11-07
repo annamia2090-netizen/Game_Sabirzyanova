@@ -25,6 +25,7 @@ namespace Game_Sabirzyanova
         public PersonInfo Player = new PersonInfo("Student", 100, 10, 1, 0, 0, 5);
         public List<PersonInfo> Enemys = new List<PersonInfo>();
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
+        public PersonInfo Enemy;
         public MainWindow()
         {
             InitializeComponent();
@@ -35,6 +36,19 @@ namespace Game_Sabirzyanova
             dispatcherTimer.Tick += AttackPlayer;
             dispatcherTimer.Interval = new System.TimeSpan(0, 0, 10);
             dispatcherTimer.Start();
+            SelectEnemy();
+        }
+        public void SelectEnemy()
+        {
+            int Id = new Random().Next(0, Enemys.Count);
+            Enemy = new PersonInfo(
+                Enemys[Id].Name,
+                Enemys[Id].Health,
+                Enemys[Id].Armor,
+                Enemys[Id].Level,
+                Enemys[Id].Glasses,
+                Enemys[Id].Money,
+                Enemys[Id].Damage);
         }
         public void UserInfoPlayer()
         {
@@ -54,7 +68,8 @@ namespace Game_Sabirzyanova
         }
         private void AttackPlayer(object sender, System.EventArgs e)
         {
-
+            Player.Health -= Convert.ToInt32(Enemy.Damage * 100f / (100f - Player.Armor));
+            UserInfoPlayer();
         }
     }
 }
