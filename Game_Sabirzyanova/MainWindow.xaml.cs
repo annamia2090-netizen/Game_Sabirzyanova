@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Game_Sabirzyanova.Classes;
 
 namespace Game_Sabirzyanova
 {
@@ -20,9 +21,26 @@ namespace Game_Sabirzyanova
     /// </summary>
     public partial class MainWindow : Window
     {
+        public PersonInfo Player = new PersonInfo("Student", 100, 10, 1, 0, 0, 5);
         public MainWindow()
         {
             InitializeComponent();
+        }
+        public void UserInfoPlayer()
+        {
+            if (Player.Glasses > 100 * Player.Level)
+            {
+                Player.Level++;
+                Player.Glasses = 0;
+                Player.Health += 100;
+                Player.Damage++;
+                Player.Armor++;
+            }
+            playerHealth.Content = "Жизненные показатели: " + Player.Health;
+            playerArmor.Content = "Броня: " + Player.Armor;
+            playerLevel.Content = "Уровень: " + Player.Level;
+            playerGlasses.Content = "Опыт: " + Player.Glasses;
+            playerMoney.Content = "Монеты: " + Player.Money;
         }
     }
 }
