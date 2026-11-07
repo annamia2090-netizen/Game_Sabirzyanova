@@ -49,10 +49,36 @@ namespace Game_Sabirzyanova
                 Enemys[Id].Glasses,
                 Enemys[Id].Money,
                 Enemys[Id].Damage);
+            monster1.Visibility = System.Windows.Visibility.Hidden;
+            monster2.Visibility = System.Windows.Visibility.Hidden;
+            monster3.Visibility = System.Windows.Visibility.Hidden;
+            if (Id == 0)
+            {
+                monster1.Visibility = System.Windows.Visibility.Visible;
+            }
+            else if (Id == 1)
+            {
+                monster2.Visibility = System.Windows.Visibility.Visible;
+            }
+            else if (Id == 2)
+            {
+                monster3.Visibility = System.Windows.Visibility.Visible;
+            }
+
+            emptyHealth.Content = "Жизненные показатели: " + Enemy.Health;
+            emptyArmor.Content = "Броня: " + Enemy.Armor;
         }
         public void UserInfoPlayer()
         {
-            if (Player.Glasses > 100 * Player.Level)
+            if (Player.Health <= 0)
+            {
+                Player.Health = 0;
+                playerHealth.Content = "Жизненные показатели: 0";
+                dispatcherTimer.Stop();
+                MessageBox.Show("Конец игры! Ваши жизненные показатели равны 0.");
+                return;
+            }
+                if (Player.Glasses > 100 * Player.Level)
             {
                 Player.Level++;
                 Player.Glasses = 0;
@@ -73,10 +99,14 @@ namespace Game_Sabirzyanova
         }
         private void AttackEnemy(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            if (Player.Health <= 0) return;
             Enemy.Health -= Convert.ToInt32(Player.Damage * 100f / (100f - Enemy.Armor));
             if (Enemy.Health <= 0)
             {
-                Player.Glasses += Enemy.Glasses;
+                Random rnd = new Random();
+                int Percent = rnd.Next(0, 31);
+                int Mnozitel = Convert.ToInt32(Enemy.Glasses * Percent / 100);
+                Player.Glasses += (Enemy.Glasses + Mnozitel);
                 Player.Money += Enemy.Money;
                 UserInfoPlayer();
                 SelectEnemy();
